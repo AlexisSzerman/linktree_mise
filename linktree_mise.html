@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Día Especial de Predicación</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 95%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 30px 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+            margin-bottom: 15px;
+        }
+        
+        .profile-picture:hover {
+            transform: scale(1.05);
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            font-size: 16px;
+            font-weight: 400;
+            color: #5a6c7d;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .subtitle {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 25px 0 20px;
+        }
+
+        /* Quitar viñetas de todas las listas */
+        ul, li {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Lista principal */
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Elementos de la lista */
+        .link-item {
+            position: relative;
+        }
+
+        /* Botones principales */
+        .link-button {
+            display: block;
+            width: 100%;
+            padding: 18px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .link-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .link-button:hover::before {
+            left: 100%;
+        }
+        
+        .link-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .link-button:active {
+            transform: translateY(0);
+        }
+
+        /* Botón toggle especial */
+        .toggle-submenu {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            position: relative;
+        }
+        
+        .toggle-submenu::after {
+            content: '▼';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: transform 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .link-item.active .toggle-submenu::after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+        
+        .toggle-submenu:hover {
+            box-shadow: 0 8px 25px rgba(78, 205, 196, 0.4);
+        }
+
+        /* Submenús */
+        .submenu {
+            display: none;
+            margin-top: 8px;
+            flex-direction: column;
+            gap: 8px;
+            padding-left: 0;
+        }
+        
+        .submenu .link-button {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #2c3e50;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 14px 18px;
+            box-shadow: 0 3px 10px rgba(168, 237, 234, 0.3);
+        }
+        
+        .submenu .link-button:hover {
+            box-shadow: 0 6px 20px rgba(168, 237, 234, 0.4);
+        }
+
+        /* Mostrar al estar activo */
+        .link-item.active > .submenu {
+            display: flex;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Efectos adicionales */
+        .container {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 📱 Estilos responsive mejorados */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            
+            .container {
+                width: 100%;
+                padding: 25px 20px;
+                margin: 0;
+            }
+            
+            .profile-picture {
+                width: 100px;
+                height: 100px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            h2 {
+                font-size: 14px;
+            }
+            
+            .subtitle {
+                font-size: 18px;
+            }
+            
+            .link-button {
+                font-size: 15px;
+                padding: 16px 18px;
+            }
+            
+            .submenu .link-button {
+                font-size: 14px;
+                padding: 12px 16px;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 22px;
+            }
+            
+            .link-button {
+                font-size: 14px;
+                padding: 14px 16px;
+            }
+        }
+
+        /* Accesibilidad y focus */
+        .link-button:focus {
+            outline: 3px solid rgba(102, 126, 234, 0.5);
+            outline-offset: 2px;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Agregar efectos de carga
+            const container = document.querySelector('.container');
+            const buttons = document.querySelectorAll('.link-button');
+            
+            // Animación escalonada para los botones
+            buttons.forEach((button, index) => {
+                button.style.opacity = '0';
+                button.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    button.style.transition = 'all 0.5s ease-out';
+                    button.style.opacity = '1';
+                    button.style.transform = 'translateY(0)';
+                }, index * 100 + 300);
+            });
+            
+            // Toggle submenu functionality
+            document.querySelectorAll(".toggle-submenu").forEach(button => {
+                button.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    const parent = button.parentElement;
+                    
+                    // Cerrar otros submenús
+                    document.querySelectorAll('.link-item.active').forEach(item => {
+                        if (item !== parent) {
+                            item.classList.remove('active');
+                        }
+                    });
+                    
+                    parent.classList.toggle("active");
+                });
+            });
+            
+            // Ripple effect para botones
+            document.querySelectorAll('.link-button').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (this.classList.contains('toggle-submenu')) return;
+                    
+                    let ripple = document.createElement('span');
+                    let rect = this.getBoundingClientRect();
+                    let size = Math.max(rect.width, rect.height);
+                    let x = e.clientX - rect.left - size / 2;
+                    let y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('ripple');
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <img src="https://ik.imagekit.io/7nyxivlfm/Gemini_Generated_Image_qk9lcuqk9lcuqk9l.png?updatedAt=1757101305313" alt="Foto de perfil" class="profile-picture">
+        <h1>Día Especial de Predicación</h1>  
+        <h2>Plaza de la misericordia - Longchamps Sur</h2> 
+        <h2>Sábado 13 de septiembre</h2>
+
+        <h2 class="subtitle">Links útiles</h2>
+
+        <ul class="links">
+            <li class="link-item">
+                <a href="https://ik.imagekit.io/7nyxivlfm/programa.jpg?updatedAt=1757190938139" class="link-button" target="_blank" rel="noopener noreferrer">📋 Programa de Actividades</a>
+            </li>
+            <li class="link-item">
+                <a href="https://www.google.com/maps/d/edit?mid=19g9nkXz4jqAA1qf2PnyzjnVzxMSGSvo&usp=sharing" class="link-button" target="_blank" rel="noopener noreferrer">🗺️ Mapa del territorio</a>
+            </li>
+            <li class="link-item">
+                <a href="https://maps.app.goo.gl/66YNFiVsGKYjgqpe9" class="link-button" target="_blank" rel="noopener noreferrer">📍 Punto de reunión y almuerzo</a>
+            </li>
+            <li class="link-item">
+                <a href="https://conociendo-mise.vercel.app/" class="link-button" target="_blank" rel="noopener noreferrer">🎮 Juego en conjunto</a>
+            </li>
+
+            <li class="link-item">
+                <a href="#" class="link-button toggle-submenu">📋 Asignaciones</a>
+                <ul class="submenu">
+                    <li><a href="https://ik.imagekit.io/7nyxivlfm/predicacion.png?updatedAt=1757193386122" class="link-button" target="_blank">🎯 Predicación</a></li>
+                    <li><a href="https://ik.imagekit.io/7nyxivlfm/acomodadores.png?updatedAt=1757193583047" class="link-button" target="_blank" rel="noopener noreferrer">👥 Acomodadores</a></li>
+                    <li><a href="https://ik.imagekit.io/7nyxivlfm/desayuno.png?updatedAt=1757193669297" class="link-button" target="_blank" rel="noopener noreferrer">☕ Desayuno</a></li>
+                    <li><a href="https://ik.imagekit.io/7nyxivlfm/limpieza.png?updatedAt=1757193669527" class="link-button" target="_blank" rel="noopener noreferrer">🧹 Limpieza</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
